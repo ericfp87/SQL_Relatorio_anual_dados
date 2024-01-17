@@ -1,0 +1,30 @@
+SELECT FORMAT(A.E3TimeStamp, 'd/M/yy H:mm') AS "DATA",
+     
+      (A.[JQ1.QGBT-A.INV01.T2.P]
+      +A.[JQ1.QGBT-A.INV02.T2.P]
+      +A.[JQ1.QGBT-A.INV03.T2.P]
+      +A.[JQ1.QGBT-A.INV04.T2.P]
+	  +B.[JQ1.QGBT-B.INV01.T2.P]
+      +B.[JQ1.QGBT-B.INV02.T2.P]
+      +B.[JQ1.QGBT-B.INV03.T2.P]
+      +B.[JQ1.QGBT-B.INV04.T2.P]
+      +B.[JQ1.QGBT-B.INV05.T2.P]
+	  +B.[JQ1.QGBT-B.INV06.T2.P]
+      +B.[JQ1.QGBT-B.INV07.T2.P]
+      +B.[JQ1.QGBT-B.INV08.T2.P]
+	  +C.[JQ1.QGBT-C.INV01.T2.P]
+      +C.[JQ1.QGBT-C.INV02.T2.P]
+      +C.[JQ1.QGBT-C.INV03.T2.P]
+      +C.[JQ1.QGBT-C.INV04.T2.P]
+      +C.[JQ1.QGBT-C.INV05.T2.P]
+	  +C.[JQ1.QGBT-C.INV06.T2.P]
+      +C.[JQ1.QGBT-C.INV07.T2.P]
+      +C.[JQ1.QGBT-C.INV08.T2.P]) AS "P(W)"
+FROM [ElipseAnalogicas].[dbo].[HistINV_QGBTA_JQ1] A
+INNER JOIN HistINV_QGBTB_JQ1 B
+ON FORMAT(A.E3TimeStamp, 'd/M/yy H:mm') = FORMAT(B.E3TimeStamp, 'd/M/yy H:mm')
+INNER JOIN HistINV_QGBTC_JQ1 C
+ON FORMAT(A.E3TimeStamp, 'd/M/yy H:mm') = FORMAT(C.E3TimeStamp, 'd/M/yy H:mm')
+WHERE A.E3TimeStamp BETWEEN '2023-01-01T00:00:00' AND '2023-12-31T23:59:59'
+AND DATEPART(MINUTE, A.E3TimeStamp) % 5 IN (0, 5)
+ORDER BY A.E3TimeStamp ASC;
